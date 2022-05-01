@@ -1,0 +1,3 @@
+export SYSTEM_NAME=playground
+export SERVICE_NAME=common
+export NETWORK_STACK_NAME=${SYSTEM_NAME}-${SERVICE_NAME}-network
