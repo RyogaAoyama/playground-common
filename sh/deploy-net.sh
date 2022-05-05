@@ -17,4 +17,4 @@ TEMPLATE_PATH='./cloudformation/Networks.yml'
 . ./cloudformation/config/parameters.txt
 
 # デプロイ
-rain deploy ${TEMPLATE_PATH} ${NETWORK_STACK_NAME} -y -p ${PROFILE} --params Env=${Env},ServiceName=${SERVICE_NAME},SystemName=${SYSTEM_NAME}
+rain deploy ${TEMPLATE_PATH} ${NETWORK_STACK_NAME} -y -p ${PROFILE} --params Env=${ENV},ServiceName=${SERVICE_NAME},SystemName=${SYSTEM_NAME}
