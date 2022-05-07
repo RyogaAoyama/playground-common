@@ -10,7 +10,6 @@ Metadata:
           default: "default"
         Parameters:
           - Env
-          - ServiceName
 
 Parameters:
   ###############################
@@ -19,9 +18,6 @@ Parameters:
   Env:
     Type: String
     Description: 環境種別
-  ServiceName:
-    Type: String
-    Description: サービス名
   SystemName:
     Type: String
     Description: システム名
@@ -35,27 +31,27 @@ Parameters:
   PublicSubnetAName:
     Type: String
     Default: public-a
-  PublicSubnetBName:
+  PublicSubnetCName:
     Type: String
-    Default: public-b
+    Default: public-c
   PrivateSubnetAName:
     Type: String
     Default: private-a
-  PrivateSubnetBName:
+  PrivateSubnetCName:
     Type: String
-    Default: private-b
+    Default: private-c
   PublicRouteTableAName:
     Type: String
     Default: public-a
-  PublicRouteTableBName:
+  PublicRouteTableCName:
     Type: String
-    Default: public-b
+    Default: public-c
   PrivateRouteTableAName:
     Type: String
     Default: private-a
-  PrivateRouteTableBName:
+  PrivateRouteTableCName:
     Type: String
-    Default: private-b
+    Default: private-c
 
 ###############################
 # リソース
@@ -109,7 +105,7 @@ Resources:
   PublicSubnetA:
     Type: AWS::EC2::Subnet
     Properties:
-      AvailabilityZone: ap-northeast-1a
+      AvailabilityZone: { "Fn::Select" : ["0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] }
       CidrBlock: !Select [ 0, !Cidr [ !GetAtt VPC.CidrBlock, 6, 8 ]]
       Tags:
         - Key: Name
@@ -120,15 +116,15 @@ Resources:
           Value: !Ref Env
       VpcId: !Ref VPC
 
-  ### PublicSubnetB ###
-  PublicSubnetB:
+  ### PublicSubnetC ###
+  PublicSubnetC:
     Type: AWS::EC2::Subnet
     Properties:
-      AvailabilityZone: ap-northeast-1a
+      AvailabilityZone: { "Fn::Select" : ["1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] }
       CidrBlock: !Select [ 1, !Cidr [ !GetAtt VPC.CidrBlock, 6, 8 ]]
       Tags:
         - Key: Name
-          Value: !Sub ${SystemName}-${PublicSubnetBName}
+          Value: !Sub ${SystemName}-${PublicSubnetCName}
         - Key: System
           Value: !Ref SystemName
         - Key: Env
@@ -139,7 +135,7 @@ Resources:
   PrivateSubnetA:
     Type: AWS::EC2::Subnet
     Properties:
-      AvailabilityZone: ap-northeast-1a
+      AvailabilityZone: { "Fn::Select" : ["0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] }
       CidrBlock: !Select [ 2, !Cidr [ !GetAtt VPC.CidrBlock, 6, 8 ]]
       Tags:
         - Key: Name
@@ -150,15 +146,15 @@ Resources:
           Value: !Ref Env
       VpcId: !Ref VPC
 
-  ### PrivateSubnetB ###
-  PrivateSubnetB:
+  ### PrivateSubnetC ###
+  PrivateSubnetC:
     Type: AWS::EC2::Subnet
     Properties:
-      AvailabilityZone: ap-northeast-1a
+      AvailabilityZone: { "Fn::Select" : ["1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] }
       CidrBlock: !Select [ 3, !Cidr [ !GetAtt VPC.CidrBlock, 6, 8 ]]
       Tags:
         - Key: Name
-          Value: !Sub ${SystemName}-${PrivateSubnetBName}
+          Value: !Sub ${SystemName}-${PrivateSubnetCName}
         - Key: System
           Value: !Ref SystemName
         - Key: Env
@@ -181,13 +177,13 @@ Resources:
           Value: !Ref Env
       VpcId: !Ref VPC
 
-  ### PublicRouteTableB ###
-  PublicRouteTableB:
+  ### PublicRouteTableC ###
+  PublicRouteTableC:
     Type: AWS::EC2::RouteTable
     Properties:
       Tags:
         - Key: Name
-          Value: !Sub ${SystemName}-${PublicRouteTableBName}
+          Value: !Sub ${SystemName}-${PublicRouteTableCName}
         - Key: System
           Value: !Ref SystemName
         - Key: Env
@@ -207,13 +203,13 @@ Resources:
           Value: !Ref Env
       VpcId: !Ref VPC
 
-  ### PrivateRouteTableB ###
-  PrivateRouteTableB:
+  ### PrivateRouteTableC ###
+  PrivateRouteTableC:
     Type: AWS::EC2::RouteTable
     Properties:
       Tags:
         - Key: Name
-          Value: !Sub ${SystemName}-${PrivateRouteTableBName}
+          Value: !Sub ${SystemName}-${PrivateRouteTableCName}
         - Key: System
           Value: !Ref SystemName
         - Key: Env
@@ -228,13 +224,13 @@ Resources:
       GatewayId: !Ref InternetGateway
       RouteTableId: !Ref PublicRouteTableA
 
-  ### PublicRouteB ###
-  PublicRouteB:
+  ### PublicRouteC ###
+  PublicRouteC:
     Type: AWS::EC2::Route
     Properties:
       DestinationCidrBlock: "0.0.0.0/0"
       GatewayId: !Ref InternetGateway
-      RouteTableId: !Ref PublicRouteTableB
+      RouteTableId: !Ref PublicRouteTableC
 
   ### PublicRouteTableAAssociation ###
   PublicSubnetRouteTableAAssociation:
@@ -243,12 +239,12 @@ Resources:
       RouteTableId: !Ref PublicRouteTableA
       SubnetId: !Ref PublicSubnetA
 
-  ### PublicRouteTableBAssociation ###
-  PublicSubnetRouteTableBAssociation:
+  ### PublicRouteTableCAssociation ###
+  PublicSubnetRouteTableCAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      RouteTableId: !Ref PublicRouteTableB
-      SubnetId: !Ref PublicSubnetB
+      RouteTableId: !Ref PublicRouteTableC
+      SubnetId: !Ref PublicSubnetC
 
   ### PrivateRouteTableAAssociation ###
   PrivateSubnetRouteTableAAssociation:
@@ -257,12 +253,12 @@ Resources:
       RouteTableId: !Ref PrivateRouteTableA
       SubnetId: !Ref PrivateSubnetA
 
-  ### PrivateRouteTableBAssociation ###
-  PrivateSubnetRouteTableBAssociation:
+  ### PrivateRouteTableCAssociation ###
+  PrivateSubnetRouteTableCAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      RouteTableId: !Ref PrivateRouteTableB
-      SubnetId: !Ref PrivateSubnetB
+      RouteTableId: !Ref PrivateRouteTableC
+      SubnetId: !Ref PrivateSubnetC
 
 ###############################
 # 出力
