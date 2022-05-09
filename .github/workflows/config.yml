@@ -2,7 +2,7 @@ name: Testing
 on: push
 
 jobs:
-  ci/cd:
+  testing:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -20,5 +20,5 @@ jobs:
       - name: cfn linter
         run: make cfn-lint
       - name: cfn deploy
-        if: contains(toJSON(github.ref), 'main')
-        run: make deploy-all
+        if: github.ref == 'refs/heads/main'
+          run: make deploy-all
