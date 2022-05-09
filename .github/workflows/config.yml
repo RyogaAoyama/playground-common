@@ -2,7 +2,7 @@ name: Testing
 on: push
 
 jobs:
-  testing:
+  ci/cd:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,3 +19,6 @@ jobs:
         run: make docker-build
       - name: cfn linter
         run: make cfn-lint
+      - name: cfn deploy
+        if: contains(toJSON(github.ref), 'main')
+        run: make deploy-all
