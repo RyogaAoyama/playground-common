@@ -1,8 +1,12 @@
-name: Testing
-on: push
+name: Deploy
+on:
+  push:
+    branches:
+      - main
+      - feature/#2
 
 jobs:
-  testing:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -10,15 +14,12 @@ jobs:
         run: |
           mkdir ${HOME}/.aws
           touch ${HOME}/.aws/config
-          echo [profile prd] >> ${HOME}/.aws/config
+          echo [default] >> ${HOME}/.aws/config
           echo aws_access_key_id=${AWS_ACCESS_KEY} >> ${HOME}/.aws/config
           echo aws_secret_access_key=${AWS_SECRET_ACCESS_KEY} >> ${HOME}/.aws/config
           echo region=ap-northeast-1 >> ${HOME}/.aws/config
           echo output=json >> ${HOME}/.aws/config
       - name: Docker build
         run: make docker-build
-      - name: cfn linter
-        run: make cfn-lint
       - name: cfn deploy
-        if: github.ref == 'refs/heads/main'
-          run: make deploy-all
+        run: make deploy-all ${ENV}

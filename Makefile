@@ -1,5 +1,5 @@
 ENV=dev
-PROFILE=dev
+PROFILE=default
 
 docker-build:
 	docker build -t playground-common:tools .
