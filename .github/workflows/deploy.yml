@@ -26,4 +26,4 @@ jobs:
       - name: Docker build
         run: make docker-build
       - name: cfn deploy
-        run: make deploy-all ${{ secrets.ENV }}
+        run: make deploy-all ENV=${{ secrets.ENV }}
