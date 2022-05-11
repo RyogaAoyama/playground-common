@@ -19,6 +19,7 @@ jobs:
           echo aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> ${HOME}/.aws/config
           echo region=ap-northeast-1 >> ${HOME}/.aws/config
           echo output=json >> ${HOME}/.aws/config
+          echo ${{ secrets.AWS_ACCESS_KEY }}
           cat ${HOME}/.aws/config
       - name: Docker build
         run: make docker-build

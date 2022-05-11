@@ -10,5 +10,4 @@ cfn-lint:
 deploy-net:
 	docker run --mount type=bind,source=$(CURDIR),target=/usr/src --mount type=bind,source=$(HOME)/.aws/,target=/root/.aws playground-common:tools bash ./sh/deploy-net.sh $(ENV) $(PROFILE)
 deploy-all:
-	docker run --mount type=bind,source=$(CURDIR),target=/usr/src --mount type=bind,source=$(HOME)/.aws/,target=/root/.aws playground-common:tools cat /root/.aws/config
 	docker run --mount type=bind,source=$(CURDIR),target=/usr/src --mount type=bind,source=$(HOME)/.aws/,target=/root/.aws playground-common:tools bash ./sh/deploy-net.sh $(ENV) $(PROFILE)
