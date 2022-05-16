@@ -1,5 +1,5 @@
 # PythonのDockerイメージを指定
-FROM python:3.9
+FROM python:3.10
 
 # cfn-lint
 RUN pip install cfn-lint
