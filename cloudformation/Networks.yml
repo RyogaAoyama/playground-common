@@ -264,5 +264,23 @@ Resources:
 # 出力
 ###############################
 Outputs:
-  VPCCidrBlock:
-    Value: !GetAtt VPC.CidrBlock
+  VPCId:
+    Value: !Ref VPC
+    Export:
+      Name: !Sub ${SystemName}-vpc-id
+  PublicSubnetA:
+    Value: !Ref PublicSubnetA
+    Export:
+      Name: !Sub ${SystemName}-public-subnet-a-id
+  PublicSubnetC:
+    Value: !Ref PublicSubnetC
+    Export:
+      Name: !Sub ${SystemName}-public-subnet-c-id
+  PrivateSubnetA:
+    Value: !Ref PrivateSubnetA
+    Export:
+      Name: !Sub ${SystemName}-private-subnet-a-id
+  PrivateSubnetC:
+    Value: !Ref PrivateSubnetC
+    Export:
+      Name: !Sub ${SystemName}-private-subnet-c-id
